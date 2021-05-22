@@ -2,11 +2,6 @@
   "name": "dogfooding",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "npx next dev",
-    "build": "next build",
-    "start": "npx next start"
-  },
   "dependencies": {
     "next": "^10.0.0",
     "react": "17.0.1",
