@@ -2,6 +2,11 @@
   "name": "dogfooding",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
     "@kentico/kontent-delivery": "^10.4.1",
     "next": "^10.0.0",

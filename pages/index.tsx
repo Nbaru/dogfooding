@@ -1,26 +1,27 @@
-import { getAllItems } from "../utils";
+import {getAllItems, Post} from "../utils";
 
-//todo: types
-const Home = (props: any) =>  {
+type HomeProps = {
+    items: Array<Post>
+}
+
+const Home = (props: HomeProps) =>  {
     const item = props.items[0];
-    console.log(props.items);
 
     return (
         <>
             <div>{item.title}</div>
-            <div>{item.content}</div>
+            <div dangerouslySetInnerHTML={{__html: item.content}}/>
         </>
     )
-}
+};
 
 export default Home;
 
-export const getStaticProps = async () =>
-    await getAllItems()
-        .then((values) => (
-            {
-                props: {
-                    items: values
-                }
-            }
-        ))
+export const getStaticProps = async (): Promise<{ readonly props: HomeProps }> => {
+    const items = await getAllItems();
+    return {
+        props: {
+            items
+        }
+    }
+};

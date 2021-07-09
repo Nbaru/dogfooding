@@ -1,15 +1,22 @@
 import {deliveryClient} from "./deliveryClient";
+import {Article} from "./article";
 
-const parsePost = (post: any) => {
-    return {
-        title: post.title.value,
-        content: post.content.value,
-    }
+export type Post = {
+    readonly title: string;
+    readonly content: string;
 }
+
+const parsePost = (post: Article): Post => {
+    return {
+        title: post.title?.value ?? '',
+        content: post.content?.value ?? '',
+    }
+};
 
 export const getAllItems = async () => {
-    return await deliveryClient
-        .items()
-        .toPromise()
-        .then((response: any) => response.items.map((post: any) => parsePost(post)));
-}
+    const response = await deliveryClient
+        .items<Article>()
+        .toPromise();
+
+    return response.items.map((post: Article) => parsePost(post));
+};
