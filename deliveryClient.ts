@@ -2,7 +2,7 @@ import {DeliveryClient, TypeResolver, IContentItem} from "@kentico/kontent-deliv
 import {Article} from "./article";
 
 export const deliveryClient = new DeliveryClient({
-    projectId: '10c3010e-a97b-01fa-5f30-b67cbddce1fe',
+    projectId: process.env.projectId ?? '',
     typeResolvers: [
         new TypeResolver('article', (rawData) => new Article())
     ]
