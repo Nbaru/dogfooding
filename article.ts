@@ -9,4 +9,19 @@ export class Article extends ContentItem {
     public title?: Elements.TextElement;
     public image?: Elements.AssetsElement;
     public content?: Elements.RichTextElement;
+    public articleCategorization?: Elements.TaxonomyElement;
+    public authorBio?: Elements.LinkedItemsElement<ContentItem>;
+    constructor() {
+        super({
+            propertyResolver: ((elementName: string) => {
+                if (elementName === 'article_categorization') {
+                    return 'articleCategorization';
+                }
+                if (elementName === 'author_bio') {
+                    return 'authorBio';
+                }
+                return elementName;
+            })
+        });
+    }
 }

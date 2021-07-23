@@ -1,22 +1,44 @@
 import {deliveryClient} from "./deliveryClient";
-import {Article} from "./article";
+import {Article as ArticleItemType} from "./article";
+import {Author as AuthorItemType} from "./author";
 
-export type Post = {
-    readonly title: string;
-    readonly content: string;
+export enum ItemType {
+    Article = 'article',
+    Author = 'author_bio',
+
+}
+type Author = {
+    readonly name: string;
+    readonly bio: string;
+    //readonly imageUrl: string;
 }
 
-const parsePost = (post: Article): Post => {
+export type Article = {
+    readonly type: string;
+    readonly title: string;
+    readonly content: string;
+    readonly author: Author;
+}
+
+type Post = ArticleItemType | AuthorItemType;
+
+const parsePost = (post: Post): Article => {
     return {
-        title: post.title?.value ?? '',
-        content: post.content?.value ?? '',
+        type: post.system.codename,
+        title: post.title?.value ?? 'empty',
+        content: post.content?.value ?? 'empty',
+        //@todo fragileeeee
+        author: {
+            name: post.authorBio?.value[0].name.value ?? 'empty',
+            bio: post.authorBio?.value[0].bio.value ?? 'empty',
+        }
     }
 };
 
 export const getAllItems = async () => {
     const response = await deliveryClient
-        .items<Article>()
+        .items()
         .toPromise();
 
-    return response.items.map((post: Article) => parsePost(post));
+    return response.items.map((post) => parsePost(post));
 };

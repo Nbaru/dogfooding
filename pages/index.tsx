@@ -1,16 +1,20 @@
-import {getAllItems, Post} from "../utils";
+import {getAllItems, ItemType, Article} from "../utils";
 
 type HomeProps = {
-    items: Array<Post>
+    readonly items: Array<Article>
 }
 
 const Home = (props: HomeProps) =>  {
-    const item = props.items[0];
-
     return (
         <>
-            <div>{item.title}</div>
-            <div dangerouslySetInnerHTML={{__html: item.content}}/>
+            {props.items.map(item => item.type === ItemType.Article ? (
+                <div key={item.title}>
+                    <div>{item.title}</div>
+                    <div>{item.author.name}</div>
+                    <div>{item.author.bio}</div>
+                    <div dangerouslySetInnerHTML={{__html: item.content}}/>
+                </div>
+            ) : null)}
         </>
     )
 };
