@@ -1,4 +1,5 @@
 import {getAllItems, ItemType, Article} from "../utils";
+import Link from 'next/link';
 
 type HomeProps = {
     readonly items: Array<Article>
@@ -7,14 +8,26 @@ type HomeProps = {
 const Home = (props: HomeProps) =>  {
     return (
         <>
-            {props.items.map(item => item.type === ItemType.Article ? (
-                <div key={item.title}>
-                    <div>{item.title}</div>
-                    <div>{item.author.name}</div>
-                    <div>{item.author.bio}</div>
-                    <div dangerouslySetInnerHTML={{__html: item.content}}/>
-                </div>
-            ) : null)}
+            {props.items.map(item => {
+                // const authorUrl = item.author.author.replace(/\s/g, '-');
+
+                return item.type === ItemType.Article ? (
+                    // todo: better key
+                    <div key={item.title}>
+                        <div>{item.title}</div>
+                        <Link
+                            href={{
+                                pathname: 'authors/[author]',
+                                query: {author: item.author.author, bio: item.author.bio}
+                            }}
+                            //as={`authors/${authorUrl}`}
+                        >
+                            <div>{item.author.author}</div>
+                        </Link>
+                        <div dangerouslySetInnerHTML={{__html: item.content}}/>
+                    </div>
+                ) : null;
+            })}
         </>
     )
 };

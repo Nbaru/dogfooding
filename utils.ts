@@ -7,8 +7,9 @@ export enum ItemType {
     Author = 'author_bio',
 
 }
-type Author = {
-    readonly name: string;
+
+export type Author = {
+    readonly author: string;
     readonly bio: string;
     //readonly imageUrl: string;
 }
@@ -29,7 +30,7 @@ const parsePost = (post: Post): Article => {
         content: post.content?.value ?? 'empty',
         //@todo fragileeeee
         author: {
-            name: post.authorBio?.value[0].name.value ?? 'empty',
+            author: post.authorBio?.value[0].name.value ?? 'empty',
             bio: post.authorBio?.value[0].bio.value ?? 'empty',
         }
     }
