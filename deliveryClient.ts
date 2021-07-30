@@ -1,6 +1,6 @@
-import {DeliveryClient, TypeResolver, IContentItem} from "@kentico/kontent-delivery";
-import {Article} from "./article";
-import {Author} from "./author";
+import {DeliveryClient, TypeResolver } from "@kentico/kontent-delivery";
+import {Article} from "./models/article";
+import {Author} from "./models/author";
 
 export const deliveryClient = new DeliveryClient({
     projectId: process.env.projectId ?? '',

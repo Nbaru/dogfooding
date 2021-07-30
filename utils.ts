@@ -1,6 +1,6 @@
 import {deliveryClient} from "./deliveryClient";
-import {Article as ArticleItemType} from "./article";
-import {Author as AuthorItemType} from "./author";
+import {Article as ArticleItemType} from "./models/article";
+import {Author as AuthorItemType} from "./models/author";
 
 export enum ItemType {
     Article = 'article',
