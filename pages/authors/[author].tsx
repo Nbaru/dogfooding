@@ -4,7 +4,8 @@ const AuthorBio = (props: Author) => {
     return (
         <>
             <div>{props.author}</div>
-            <div>{props.bio}</div>
+            {/*todo where is kontent? :D*/}
+            <div dangerouslySetInnerHTML={{__html: props.bio}}/>
         </>
     )
 }

@@ -8,5 +8,5 @@ import { ContentItem, Elements } from '@kentico/kontent-delivery';
 export class Author extends ContentItem {
     public portrait?: Elements.AssetsElement;
     public name?: Elements.TextElement;
-    public bio?: Elements.TextElement;
+    public bio?: Elements.RichTextElement;
 }
