@@ -6,7 +6,22 @@ import { ContentItem, Elements } from '@kentico/kontent-delivery';
  * Tip: You can replace 'ContentItem' with another generated class to fully leverage strong typing.
  */
 export class Author extends ContentItem {
+    public urlSlug?: Elements.TextElement;
     public portrait?: Elements.AssetsElement;
     public name?: Elements.TextElement;
+    public untitledUrlSlug?: Elements.UrlSlugElement;
     public bio?: Elements.RichTextElement;
+    constructor() {
+        super({
+            propertyResolver: ((elementName: string) => {
+                if (elementName === 'url_slug') {
+                    return 'urlSlug';
+                }
+                if (elementName === 'untitled_url_slug') {
+                    return 'untitledUrlSlug';
+                }
+                return elementName;
+            })
+        });
+    }
 }

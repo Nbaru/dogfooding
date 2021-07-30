@@ -1,44 +1,34 @@
-import {getAllItems, ItemType, Article} from "../utils";
+import {getAllPostsList, PostList} from "../utils/postList";
 import Link from 'next/link';
 
 type HomeProps = {
-    readonly items: Array<Article>
+    readonly posts: ReadonlyArray<PostList>
 }
 
-const Home = (props: HomeProps) =>  {
-    return (
+const Home = (props: HomeProps) =>
+    (
         <>
-            {props.items.map(item => {
-                // const authorUrl = item.author.author.replace(/\s/g, '-');
-
-                return item.type === ItemType.Article ? (
-                    // todo: better key
-                    <div key={item.title}>
-                        <div>{item.title}</div>
-                        <Link
-                            href={{
-                                pathname: 'authors/[author]',
-                                query: {author: item.author.author, bio: item.author.bio}
-                            }}
-                            //as={`authors/${authorUrl}`}
-                        >
-                            <div>{item.author.author}</div>
-                        </Link>
-                        <div dangerouslySetInnerHTML={{__html: item.content}}/>
-                    </div>
-                ) : null;
-            })}
+            {props.posts.map(post => (
+                <Link
+                    key={post.id}
+                    href={{
+                        pathname: 'posts/[slug]',
+                        query: { slug: post.id }
+                    }}
+                >
+                    <div>{post.title}</div>
+                </Link>
+            ))}
         </>
     )
-};
 
 export default Home;
 
 export const getStaticProps = async (): Promise<{ readonly props: HomeProps }> => {
-    const items = await getAllItems();
+    const items = await getAllPostsList();
     return {
         props: {
-            items
+            posts: items
         }
     }
 };

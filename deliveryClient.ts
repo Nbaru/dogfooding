@@ -1,11 +1,12 @@
 import {DeliveryClient, TypeResolver } from "@kentico/kontent-delivery";
-import {Article} from "./models/article";
+import {Post} from "./models/post";
 import {Author} from "./models/author";
+import {ItemTypes} from "./constants";
 
 export const deliveryClient = new DeliveryClient({
     projectId: process.env.projectId ?? '',
     typeResolvers: [
-        new TypeResolver('article', (rawData) => new Article()),
-        new TypeResolver('author', () => new Author())
+        new TypeResolver(ItemTypes.Post, (rawData) => new Post()),
+        new TypeResolver(ItemTypes.Author, () => new Author())
     ]
 });

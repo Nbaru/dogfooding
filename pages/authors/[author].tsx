@@ -1,17 +1,11 @@
-import {Author} from "../../utils";
-
-const AuthorBio = (props: Author) => {
+const AuthorBio = () => {
     return (
         <>
-            <div>{props.author}</div>
-            {/*todo where is kontent? :D*/}
-            <div dangerouslySetInnerHTML={{__html: props.bio}}/>
+            {/*<div>{props.author}</div>*/}
+            {/*<div dangerouslySetInnerHTML={{__html: props.bio}}/>*/}
+            TBD
         </>
     )
 }
 
 export default AuthorBio;
-
-AuthorBio.getInitialProps = ({ query: { author, bio}}) => {
-    return {author, bio}
-}
