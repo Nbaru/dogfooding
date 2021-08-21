@@ -1,6 +1,6 @@
 import {deliveryClient} from "../deliveryClient";
 import {Post as PostKontentModel} from "../models/post";
-import {ItemsCodeNames} from "../constants";
+import {ItemTypes} from "../constants";
 
 export type PostList = {
     readonly id: string;
@@ -17,7 +17,7 @@ const parsePostsList = (post: PostKontentModel): PostList => {
 export const getAllPostsList = async () => {
     const response = await deliveryClient
         .items<PostKontentModel>()
-        .equalsFilter('system.codename', ItemsCodeNames.Post)
+        .equalsFilter('system.type', ItemTypes.Post)
         .toPromise();
 
     return response.items.map((post) => parsePostsList(post));

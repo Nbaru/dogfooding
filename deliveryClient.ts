@@ -7,6 +7,6 @@ export const deliveryClient = new DeliveryClient({
     projectId: process.env.projectId ?? '',
     typeResolvers: [
         new TypeResolver(ItemTypes.Post, (rawData) => new Post()),
-        new TypeResolver(ItemTypes.Author, () => new Author())
+        new TypeResolver(ItemTypes.Author, (rawData) => new Author())
     ]
 });

@@ -16,7 +16,7 @@ const parsePost = (post: PostKontentModel, id: string): Post => {
         content: post.content?.value ?? '',
         // @todo better way?
         authorName: post.authorBio?.value[0].name.value ?? '',
-        authorId: post.authorBio?.value[0].untitledUrlslug?.value ?? '',
+        authorId: post.authorBio?.value[0].urlSlug.value ?? '',
     }
 
 };
