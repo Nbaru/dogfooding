@@ -1,5 +1,6 @@
 import {getAllPostsList, PostList} from "../utils/postList";
 import Link from 'next/link';
+import {ListItemLink} from "../styledComponets/components";
 
 type HomeProps = {
     readonly posts: ReadonlyArray<PostList>
@@ -16,7 +17,9 @@ const Home = (props: HomeProps) =>
                         query: { slug: post.id }
                     }}
                 >
-                    <div>{post.title}</div>
+                    <ListItemLink >
+                        {post.title}
+                    </ListItemLink>
                 </Link>
             ))}
         </>

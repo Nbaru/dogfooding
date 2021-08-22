@@ -2,6 +2,7 @@ import Link from "next/link";
 import {getPost, Post as PostType} from "../../utils/post";
 import {getAllPostsList} from "../../utils/postList";
 import {Params} from "next/dist/next-server/server/router";
+import {Subtitle, Title} from "../../styledComponets/components";
 
 type PostProps = {
     readonly posts: ReadonlyArray<PostType>
@@ -12,7 +13,9 @@ const Post = (props: PostProps) => {
         <>
             {props.posts.map(item => (
                 <div key={item.id}>
-                    <div>{item.title}</div>
+                    <Title>
+                        {item.title}
+                    </Title>
 
                     <Link
                         href={{
@@ -20,7 +23,9 @@ const Post = (props: PostProps) => {
                             query: {author: item.authorId}
                         }}
                     >
-                        <div>{item.authorName}</div>
+                        <Subtitle>
+                            {item.authorName}
+                        </Subtitle>
                     </Link>
                     <div dangerouslySetInnerHTML={{__html: item.content}}/>
                 </div>

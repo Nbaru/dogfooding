@@ -1,5 +1,6 @@
 import {Params} from "next/dist/next-server/server/router";
 import {Author as AuthorType, getAuthor, getAuthorIds} from "../../utils/author";
+import {Title} from "../../styledComponets/components";
 
 type AuthorProps = {
     readonly items: ReadonlyArray<AuthorType>
@@ -10,7 +11,10 @@ const AuthorBio = (props: AuthorProps) => {
         <>
             {props.items.map(item => (
                 <div key={item.id}>
-                    <div>{item.authorName}</div>
+                    <Title>
+                        {item.authorName}
+                    </Title>
+
                     <div dangerouslySetInnerHTML={{__html: item.bio}}/>
                 </div>
             ))}
@@ -27,8 +31,8 @@ export const getStaticProps = async ({ params: { author } }: Params): Promise<{ 
         props: {
             items,
         }
-    }
-}
+    };
+};
 
 export const getStaticPaths = async () => {
     // todo: function for every getStaticPaths
