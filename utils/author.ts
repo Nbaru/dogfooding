@@ -3,30 +3,26 @@ import {deliveryClient} from "../deliveryClient";
 import {ItemTypes} from "../constants";
 
 export type Author = {
-    readonly id: string;
     readonly authorName: string;
     readonly bio: string;
 }
 
-const parseAuthor = (author: AuthorKontentModel, id: string): Author => {
-    return {
-        id,
-        authorName: author.name?.value ?? '',
-        bio: author.bio?.value ?? '',
-    }
+const parseAuthor = (author: AuthorKontentModel): Author => ({
+    authorName: author.name?.value ?? '',
+    bio: author.bio?.value ?? '',
+});
 
-};
-
-export const getAuthor = async (id: string) => {
+export const getAuthor = async (slug: string): Promise<Author> => {
     const response = await deliveryClient
         .items<AuthorKontentModel>()
-        .equalsFilter('elements.untitled_url_slug', id)
+        .equalsFilter('elements.untitled_url_slug', slug)
         .toPromise()
 
-    return response.items.map(author => parseAuthor(author, id))
+    return response.items.map(author => parseAuthor(author))?.[0];
 };
 
-export const getAuthorIds = async () => {
+// todo: generic function with constraint to untitledUrlSlug ??
+export const getAuthorSlugs = async () => {
     const response = await deliveryClient
         .items<AuthorKontentModel>()
         .equalsFilter('system.type', ItemTypes.Author)

@@ -1,20 +1,22 @@
-import {getAllPostsList, PostList} from "../utils/postList";
+import {getAllPostsList, LinkData} from "../utils/postList";
 import Link from 'next/link';
 import {ListItemLink} from "../styledComponets/components";
+import {createGuid} from "../utils/createGuid";
+import {FC} from "react";
 
 type HomeProps = {
-    readonly posts: ReadonlyArray<PostList>
+    readonly posts: ReadonlyArray<LinkData>
 }
 
-const Home = (props: HomeProps) =>
+const Home: FC<HomeProps> = ({posts}) =>
     (
         <>
-            {props.posts.map(post => (
+            {posts.map(post => (
                 <Link
-                    key={post.id}
+                    key={createGuid()}
                     href={{
                         pathname: 'posts/[slug]',
-                        query: { slug: post.id }
+                        query: { slug: post.slug }
                     }}
                 >
                     <ListItemLink >
@@ -28,10 +30,10 @@ const Home = (props: HomeProps) =>
 export default Home;
 
 export const getStaticProps = async (): Promise<{ readonly props: HomeProps }> => {
-    const items = await getAllPostsList();
+    const posts = await getAllPostsList();
     return {
         props: {
-            posts: items
+            posts,
         }
     }
 };

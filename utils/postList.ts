@@ -2,19 +2,19 @@ import {deliveryClient} from "../deliveryClient";
 import {Post as PostKontentModel} from "../models/post";
 import {ItemTypes} from "../constants";
 
-export type PostList = {
-    readonly id: string;
+export type LinkData = {
+    readonly slug: string;
     readonly title: string;
 }
 
-const parsePostsList = (post: PostKontentModel): PostList => {
+const parsePostsList = (post: PostKontentModel): LinkData => {
     return {
-        id: post.untitledUrlSlug?.value ?? '',
+        slug: post.untitledUrlSlug?.value ?? '',
         title: post.title?.value ?? '',
     }
 };
 
-export const getAllPostsList = async () => {
+export const getAllPostsList = async (): Promise<ReadonlyArray<LinkData>> => {
     const response = await deliveryClient
         .items<PostKontentModel>()
         .equalsFilter('system.type', ItemTypes.Post)
