@@ -1,9 +1,10 @@
 import Link from "next/link";
 import {getPost, Post as PostType} from "../../utils/post";
-import {getAllPostsList} from "../../utils/postList";
 import {Params} from "next/dist/next-server/server/router";
 import {Subtitle, Title} from "../../styledComponets/components";
 import {FC} from "react";
+import {ItemTypes} from "../../constants";
+import {getStaticPathsEntity} from "../../utils/getPaths";
 
 
 const Post: FC<PostType> = ({ title, authorSlug, authorName, content}) =>
@@ -42,10 +43,4 @@ export const getStaticProps = async ({ params: { slug } }: Params): Promise<{ re
     };
 };
 
-export const getStaticPaths = async () => {
-    const posts = await getAllPostsList();
-    const paths = posts.map(post => ({
-        params: { slug: post.slug }
-    }));
-    return { paths, fallback: false };
-}
+export const getStaticPaths = () => getStaticPathsEntity(ItemTypes.Post, 'slug');

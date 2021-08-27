@@ -1,6 +1,7 @@
 import {Author as AuthorKontentModel} from "../models/author";
 import {deliveryClient} from "../deliveryClient";
-import {ItemTypes} from "../constants";
+import {ItemsWithUrlSlug, ItemTypes, ItemTypesWithUrlSlug} from "../constants";
+import {ContentItem, Elements} from "@kentico/kontent-delivery";
 
 export type Author = {
     readonly authorName: string;
@@ -19,18 +20,4 @@ export const getAuthor = async (slug: string): Promise<Author> => {
         .toPromise()
 
     return response.items.map(author => parseAuthor(author))?.[0];
-};
-
-// todo: generic function with constraint to untitledUrlSlug ??
-export const getAuthorSlugs = async () => {
-    const response = await deliveryClient
-        .items<AuthorKontentModel>()
-        .equalsFilter('system.type', ItemTypes.Author)
-        .toPromise()
-
-    return response.items.map((post) => {
-        return {
-            id: post.untitledUrlSlug?.value ?? '',
-        }
-    })
 };
