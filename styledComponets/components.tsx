@@ -20,4 +20,18 @@ export const ListItemLink = styled.div`
   margin-bottom: 15px;
   background-color: #ECCFF4;
   border-radius: 16px;
+  display: flex;
+  align-items: center;
+`;
+
+export const Tag = styled.div`
+  padding: 6px;
+  background-color: #feffc7;
+  border-radius: 12px;
+  display: inline-block;
+  font-size: 10px;
+  margin-right: 4px;
+  &:first-child {
+    margin-left: 12px;
+  }
 `;

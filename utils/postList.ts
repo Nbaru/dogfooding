@@ -5,12 +5,16 @@ import {ItemTypes} from "../constants";
 export type LinkData = {
     readonly slug: string;
     readonly title: string;
+    readonly taxonomies: ReadonlyArray<string>;
 }
 
 const parsePostsList = (post: PostKontentModel): LinkData => {
+    console.log(post.articleCategorization?.value);
+    const taxonomies = post.articleCategorization?.value.map(value => value.name) ?? [];
     return {
         slug: post.untitledUrlSlug?.value ?? '',
         title: post.title?.value ?? '',
+        taxonomies,
     }
 };
 

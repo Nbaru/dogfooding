@@ -1,6 +1,6 @@
 import {getAllPostsList, LinkData} from "../utils/postList";
 import Link from 'next/link';
-import {ListItemLink} from "../styledComponets/components";
+import {ListItemLink, Tag} from "../styledComponets/components";
 import {createGuid} from "../utils/createGuid";
 import {FC} from "react";
 
@@ -21,6 +21,13 @@ const Home: FC<HomeProps> = ({posts}) =>
                 >
                     <ListItemLink >
                         {post.title}
+                        {
+                            post.taxonomies.map(taxonomy => (
+                                <Tag>
+                                    {taxonomy}
+                                </Tag>
+                            ))
+                        }
                     </ListItemLink>
                 </Link>
             ))}
