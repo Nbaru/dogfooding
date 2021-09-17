@@ -5,7 +5,7 @@ import {FC} from "react";
 import {ItemTypes} from "../../constants";
 import {getStaticPathsEntity} from "../../utils/getPaths";
 
-const AuthorBio: FC<AuthorType> = ({ authorName, bio }) =>
+const AuthorBio: FC<AuthorType> = ({ authorName, bio, portrait }) =>
     (
         <>
             <Title>
@@ -13,6 +13,7 @@ const AuthorBio: FC<AuthorType> = ({ authorName, bio }) =>
             </Title>
 
             <div dangerouslySetInnerHTML={{__html: bio}}/>
+            <img src={portrait} />
         </>
     )
 
@@ -25,6 +26,7 @@ export const getStaticProps = async ({ params: { author } }: Params): Promise<{ 
         props: {
             authorName: item.authorName,
             bio: item.bio,
+            portrait: item.portrait,
         }
     };
 };

@@ -6,6 +6,7 @@ export type Post = {
     readonly content: string;
     readonly authorName: string;
     readonly authorSlug: string;
+    readonly imageUrl: string;
 }
 
 const parsePost = (post: PostKontentModel): Post => ({
@@ -13,6 +14,7 @@ const parsePost = (post: PostKontentModel): Post => ({
     content: post.content?.value ?? '',
     authorName: post.authorBio?.value?.[0].name?.value ?? '',
     authorSlug: post.authorBio?.value?.[0].untitledUrlSlug?.value ?? '',
+    imageUrl: post.image?.value?.[0].url ?? '',
 });
 
 export const getPost = async (slug: string): Promise<Post> => {

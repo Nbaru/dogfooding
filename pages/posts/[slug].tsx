@@ -7,7 +7,7 @@ import {ItemTypes} from "../../constants";
 import {getStaticPathsEntity} from "../../utils/getPaths";
 
 
-const Post: FC<PostType> = ({ title, authorSlug, authorName, content}) =>
+const Post: FC<PostType> = ({ title, authorSlug, authorName, content, imageUrl}) =>
     (
         <div>
             <Title>
@@ -25,6 +25,7 @@ const Post: FC<PostType> = ({ title, authorSlug, authorName, content}) =>
                 </Subtitle>
             </Link>
             <div dangerouslySetInnerHTML={{__html: content}}/>
+            <img src={imageUrl}/>
         </div>
     );
 
@@ -39,6 +40,7 @@ export const getStaticProps = async ({ params: { slug } }: Params): Promise<{ re
             authorSlug: post.authorSlug,
             authorName: post.authorName,
             content: post.content,
+            imageUrl: post.imageUrl,
         }
     };
 };

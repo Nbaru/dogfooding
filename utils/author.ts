@@ -6,11 +6,13 @@ import {ContentItem, Elements} from "@kentico/kontent-delivery";
 export type Author = {
     readonly authorName: string;
     readonly bio: string;
+    readonly portrait: string;
 }
 
 const parseAuthor = (author: AuthorKontentModel): Author => ({
     authorName: author.name?.value ?? '',
     bio: author.bio?.value ?? '',
+    portrait: author.portrait?.value?.[0].url ?? '',
 });
 
 export const getAuthor = async (slug: string): Promise<Author> => {
