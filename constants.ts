@@ -29,3 +29,5 @@ type FilterItemTypesWithUrlSlug<T extends ItemTypes> = FilterEntriesWithUrlSlug<
 
 export type ItemTypesWithUrlSlug = FilterItemTypesWithUrlSlug<ItemTypes>;
 export type ItemsWithUrlSlug = MapItemTypeToItem[ItemTypesWithUrlSlug];
+
+export const articleCategorizationTaxonomy = 'article_categorization';

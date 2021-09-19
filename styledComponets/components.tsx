@@ -35,3 +35,15 @@ export const Tag = styled.div`
     margin-left: 12px;
   }
 `;
+
+export const FilterWrapper = styled.div`
+  margin-bottom: 50px;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+export const FilterItem = styled.div`
+  margin-right: 8px;
+  margin-bottom: 8px;
+  display: flex;
+`;
