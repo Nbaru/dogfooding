@@ -17,11 +17,19 @@ const parsePostsList = (post: PostKontentModel): LinkData => {
     }
 };
 
-export const getAllPostsList = async (): Promise<ReadonlyArray<LinkData>> => {
+const invokeFilter = (terms: ReadonlyArray<string>): boolean => !(terms.length <= 0 || terms[0] === '');
+
+export const getAllPostsList = async (terms: ReadonlyArray<string>): Promise<ReadonlyArray<LinkData>> => {
     const response = await deliveryClient
         .items<PostKontentModel>()
         .equalsFilter('system.type', ItemTypes.Post)
         .toPromise();
 
-    return response.items.map((post) => parsePostsList(post));
+    return response.items
+        .filter(post => invokeFilter(terms)
+            ? terms.every(term =>
+                post.articleCategorization?.value.map(value => value.name).indexOf(term) !== -1) ?? false
+            : post
+        )
+        .map((post) => parsePostsList(post));
 };

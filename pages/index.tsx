@@ -1,38 +1,25 @@
 import {getAllPostsList, LinkData} from "../utils/postList";
 import Link from 'next/link';
-import {FilterItem, FilterWrapper, ListItemLink, Tag} from "../styledComponets/components";
+import {ListItemLink, Tag} from "../styledComponets/components";
 import {createGuid} from "../utils/createGuid";
 import {FC} from "react";
 import {getTaxonomies} from "../utils/taxonomies";
+import {GetServerSideProps} from "next";
+import {Filter} from "../components/Filter";
 
 type HomeProps = {
     readonly posts: ReadonlyArray<LinkData>;
     readonly taxonomies: ReadonlyArray<{ name: string }>;
+    readonly checkedTerms: ReadonlyArray<string>;
 }
 
-const Home: FC<HomeProps> = ({posts, taxonomies}) => {
-    return (
+const Home: FC<HomeProps> = ({posts, taxonomies, checkedTerms}) =>
+    (
         <>
-            <FilterWrapper>
-                {taxonomies.map(taxonomy => {
-                    const term = taxonomy.name;
-                    return (
-                        <FilterItem>
-                            <input
-                                type="checkbox"
-                                id={term}
-                                onClick={(e) => {
-                                    const urlParams = new URLSearchParams(window.location.search)
-                                    urlParams.set(term, term)
-                                    window.location.search = urlParams.toString();
-                                }
-                                }
-                            />
-                            <label htmlFor={term}>{term}</label>
-                        </FilterItem>
-                    );
-                })}
-            </FilterWrapper>
+            <Filter
+                taxonomies={taxonomies}
+                checkedTerms={checkedTerms}
+            />
 
             {posts.map(post => (
                 <Link
@@ -55,19 +42,22 @@ const Home: FC<HomeProps> = ({posts, taxonomies}) => {
                 </Link>
             ))}
         </>
-    );
-}
+    )
 
 export default Home;
 
-export const getStaticProps = async (): Promise<{ readonly props: HomeProps }> => {
-    const posts = await getAllPostsList();
+export const getServerSideProps: GetServerSideProps = async ( context ): Promise<{ readonly props: HomeProps }> => {
+    const query = context.query.value as string;
+    const checkedTerms = query?.split(',') ?? [];
+    const posts = await getAllPostsList(checkedTerms);
+
     const taxonomies = await getTaxonomies();
 
     return {
         props: {
             posts,
             taxonomies,
+            checkedTerms,
         }
     }
 };
