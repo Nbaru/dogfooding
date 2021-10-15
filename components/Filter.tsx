@@ -37,8 +37,9 @@ export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
                                 await refreshData(newQueryString);
                                 }
                             }
-                            defaultChecked={checkedTerms?.includes(term) ?? false}
+                            checked={checkedTerms?.includes(term) ?? false}
                         />
+                        {/*@todo: why defaultChecked works? without page refresh*/}
                         <label htmlFor={term}>{term}</label>
                     </FilterItem>
                 );
