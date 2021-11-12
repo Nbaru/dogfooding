@@ -17,7 +17,8 @@
     "jsx": "preserve",
     "target": "es5",
     "noEmit": true,
-    "module": "esnext"
+    "module": "esnext",
+    "downlevelIteration": true,
   },
   "include": [
     "src"

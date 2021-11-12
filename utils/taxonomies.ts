@@ -1,10 +1,8 @@
 import {deliveryClient} from "../deliveryClient";
-import {articleCategorizationTaxonomy} from "../constants";
 
-//todo: recursion for nested terms?? (map in map? :D)
-export const getTaxonomies = async (): Promise<Array<string>> => {
+export const getTerms = async (name: string): Promise<Array<string>> => {
     const response = await deliveryClient
-        .taxonomy(articleCategorizationTaxonomy)
+        .taxonomy(name)
         .toPromise();
 
     return response?.taxonomy.terms.map(term => term.name);

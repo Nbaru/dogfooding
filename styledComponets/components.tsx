@@ -36,8 +36,12 @@ export const Tag = styled.div`
   }
 `;
 
+export const FilterGroup = styled.div`
+  margin-bottom: 50px
+`;
+
 export const FilterWrapper = styled.div`
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
 `;

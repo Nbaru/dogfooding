@@ -1,25 +1,35 @@
 import {getAllPostsList, LinkData} from "../utils/postList";
 import Link from 'next/link';
-import {ListItemLink, Tag} from "../styledComponets/components";
+import {FilterGroup, ListItemLink, Tag} from "../styledComponets/components";
 import {createGuid} from "../utils/createGuid";
 import {FC} from "react";
-import {getTaxonomies} from "../utils/taxonomies";
+import {getTerms} from "../utils/taxonomies";
 import {GetServerSideProps} from "next";
-import {Filter} from "../components/Filter";
+import {Filter, FilterData} from "../components/Filter";
+import {Taxonomies} from "../constants";
+import {getFiltersData} from "../utils/filter";
 
 type HomeProps = {
     readonly posts: ReadonlyArray<LinkData>;
-    readonly taxonomies: ReadonlyArray<string>;
-    readonly checkedTerms: ReadonlyArray<string>;
+    readonly filters: ReadonlyArray<FilterData>;
 }
 
-const Home: FC<HomeProps> = ({posts, taxonomies, checkedTerms}) =>
+const Home: FC<HomeProps> = ({ posts, filters}) =>
     (
         <>
-            <Filter
-                taxonomies={taxonomies}
-                checkedTerms={checkedTerms}
-            />
+            <FilterGroup>
+                {filters.map(filter => {
+                    const id = createGuid();
+                    return (
+                        <Filter
+                            key={id}
+                            name={filter.name}
+                            terms={filter.terms}
+                            checkedTerms={filter.checkedTerms}
+                        />
+                    );
+                })}
+            </FilterGroup>
 
             {posts.map(post => {
                 const id = createGuid();
@@ -34,11 +44,11 @@ const Home: FC<HomeProps> = ({posts, taxonomies, checkedTerms}) =>
                         <ListItemLink>
                             {post.title}
                             {
-                                post.taxonomies.map(taxonomy => {
+                                post.itemCategorization.map(term => {
                                     const id = createGuid();
                                     return (
                                         <Tag key={id}>
-                                            {taxonomy}
+                                            {term}
                                         </Tag>
                                     );
                                 })
@@ -53,16 +63,21 @@ const Home: FC<HomeProps> = ({posts, taxonomies, checkedTerms}) =>
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ( context ): Promise<{ readonly props: HomeProps }> => {
-    const query = context.query.value as string;
-    const checkedTerms = query?.split(',') ?? [];
-    const taxonomies = await getTaxonomies();
-    const posts = await getAllPostsList(checkedTerms, taxonomies);
+    const filters = await Promise.all(getFiltersData(context.query));
+
+    const posts = await getAllPostsList(
+        filters
+            .reduce((data, filter) => 
+                data.set(filter.name, {
+                    terms: filter.terms,
+                    checkedTerms: filter.checkedTerms
+                }), new Map)
+    );
 
     return {
         props: {
             posts,
-            taxonomies,
-            checkedTerms,
+            filters,
         }
     }
 };

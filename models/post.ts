@@ -13,6 +13,7 @@ export class Post extends ContentItem {
     public urlSlug?: Elements.TextElement;
     public content?: Elements.RichTextElement;
     public articleCategorization?: Elements.TaxonomyElement;
+    public gendre?: Elements.TaxonomyElement;
     public authorBio?: Elements.LinkedItemsElement<Author>;
     constructor() {
         super({

@@ -1,20 +1,21 @@
 import React from "react";
 import {FilterItem, FilterWrapper} from "../styledComponets/components";
-import {getQueryString, getUrlParamsList, queryValueName} from "../utils/filter";
+import {getQueryData, getQuery} from "../utils/filter";
 import {useRouter} from "next/router";
 
-type FilterProps = {
-    readonly taxonomies: ReadonlyArray<string>;
+export type FilterData = {
+    readonly terms: ReadonlyArray<string>;
     readonly checkedTerms: ReadonlyArray<string>;
+    readonly name: string;
 };
 
-export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
+export const Filter: React.FC<FilterData> = ({ terms, checkedTerms, name }) => {
     const router = useRouter();
     const refreshData = async (query: string) => {
         // change url, but do not call `getServerSideProps`
         await router.push(
             router.query,
-            {query: `${queryValueName}=${query}`},
+            {query: query},
             {shallow: true}
         );
 
@@ -24,27 +25,20 @@ export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
 
     return (
         <FilterWrapper>
-            {taxonomies.map(term =>
+            {terms.map(term =>
                 (
                     <FilterItem key={term}>
                         <input
                             type="checkbox"
                             id={term}
-                            onClick={async () => {
-                                const urlParamsList = getUrlParamsList();
-                                await refreshData(
-                                    (urlParamsList.length > 0 && urlParamsList[0] !== '')
-                                        ? getQueryString(urlParamsList, term)
-                                        : term
-                                );
-                            }
+                            onClick={async () => await refreshData(getQuery(name, getQueryData(), term))
                             }
                             defaultChecked={checkedTerms?.includes(term) ?? false}
                         />
-                        {/*@todo: why defaultChecked works? without page refresh*/}
                         <label htmlFor={term}>{term}</label>
                     </FilterItem>
-                ))}
+                )
+            )}
         </FilterWrapper>
     )
 };
