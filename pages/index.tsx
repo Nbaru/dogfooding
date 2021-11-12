@@ -9,7 +9,7 @@ import {Filter} from "../components/Filter";
 
 type HomeProps = {
     readonly posts: ReadonlyArray<LinkData>;
-    readonly taxonomies: ReadonlyArray<{ name: string }>;
+    readonly taxonomies: ReadonlyArray<string>;
     readonly checkedTerms: ReadonlyArray<string>;
 }
 
@@ -55,9 +55,8 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async ( context ): Promise<{ readonly props: HomeProps }> => {
     const query = context.query.value as string;
     const checkedTerms = query?.split(',') ?? [];
-    const posts = await getAllPostsList(checkedTerms);
-
     const taxonomies = await getTaxonomies();
+    const posts = await getAllPostsList(checkedTerms, taxonomies);
 
     return {
         props: {

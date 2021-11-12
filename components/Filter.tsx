@@ -4,7 +4,7 @@ import {getQueryString, getUrlParamsList, queryValueName} from "../utils/filter"
 import {useRouter} from "next/router";
 
 type FilterProps = {
-    readonly taxonomies: ReadonlyArray<{ name: string }>;
+    readonly taxonomies: ReadonlyArray<string>;
     readonly checkedTerms: ReadonlyArray<string>;
 };
 
@@ -24,9 +24,8 @@ export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
 
     return (
         <FilterWrapper>
-            {taxonomies.map(taxonomy => {
-                const term = taxonomy.name;
-                return (
+            {taxonomies.map(term =>
+                (
                     <FilterItem key={term}>
                         <input
                             type="checkbox"
@@ -37,16 +36,15 @@ export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
                                     (urlParamsList.length > 0 && urlParamsList[0] !== '')
                                         ? getQueryString(urlParamsList, term)
                                         : term
-                                    );
-                                }
+                                );
+                            }
                             }
                             defaultChecked={checkedTerms?.includes(term) ?? false}
                         />
                         {/*@todo: why defaultChecked works? without page refresh*/}
                         <label htmlFor={term}>{term}</label>
                     </FilterItem>
-                );
-            })}
+                ))}
         </FilterWrapper>
     )
 };
