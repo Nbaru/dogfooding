@@ -21,26 +21,32 @@ const Home: FC<HomeProps> = ({posts, taxonomies, checkedTerms}) =>
                 checkedTerms={checkedTerms}
             />
 
-            {posts.map(post => (
-                <Link
-                    key={createGuid()}
-                    href={{
-                        pathname: 'posts/[slug]',
-                        query: {slug: post.slug}
-                    }}
-                >
-                    <ListItemLink>
-                        {post.title}
-                        {
-                            post.taxonomies.map(taxonomy => (
-                                <Tag>
-                                    {taxonomy}
-                                </Tag>
-                            ))
-                        }
-                    </ListItemLink>
-                </Link>
-            ))}
+            {posts.map(post => {
+                const id = createGuid();
+                return (
+                    <Link
+                        key={id}
+                        href={{
+                            pathname: 'posts/[slug]',
+                            query: {slug: post.slug}
+                        }}
+                    >
+                        <ListItemLink>
+                            {post.title}
+                            {
+                                post.taxonomies.map(taxonomy => {
+                                    const id = createGuid();
+                                    return (
+                                        <Tag key={id}>
+                                            {taxonomy}
+                                        </Tag>
+                                    );
+                                })
+                            }
+                        </ListItemLink>
+                    </Link>
+                );
+            })}
         </>
     )
 

@@ -1,6 +1,6 @@
 import React from "react";
 import {FilterItem, FilterWrapper} from "../styledComponets/components";
-import {getQueryString, getUrlParams, queryValueName} from "../utils/filter";
+import {getQueryString, getUrlParamsList, queryValueName} from "../utils/filter";
 import {useRouter} from "next/router";
 
 type FilterProps = {
@@ -32,12 +32,15 @@ export const Filter: React.FC<FilterProps> = ({ taxonomies, checkedTerms }) => {
                             type="checkbox"
                             id={term}
                             onClick={async () => {
-                                const queryString = getUrlParams();
-                                const newQueryString = queryString ? getQueryString(queryString, term) : term;
-                                await refreshData(newQueryString);
+                                const urlParamsList = getUrlParamsList();
+                                await refreshData(
+                                    (urlParamsList.length > 0 && urlParamsList[0] !== '')
+                                        ? getQueryString(urlParamsList, term)
+                                        : term
+                                    );
                                 }
                             }
-                            checked={checkedTerms?.includes(term) ?? false}
+                            defaultChecked={checkedTerms?.includes(term) ?? false}
                         />
                         {/*@todo: why defaultChecked works? without page refresh*/}
                         <label htmlFor={term}>{term}</label>
