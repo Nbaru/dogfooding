@@ -13,7 +13,8 @@ export class Post extends ContentItem {
     public urlSlug?: Elements.TextElement;
     public content?: Elements.RichTextElement;
     public articleCategorization?: Elements.TaxonomyElement;
-    public gendre?: Elements.TaxonomyElement;
+    public genre?: Elements.TaxonomyElement;
+    public difficulty?: Elements.TaxonomyElement;
     public authorBio?: Elements.LinkedItemsElement<Author>;
     constructor() {
         super({
@@ -23,9 +24,6 @@ export class Post extends ContentItem {
                 }
                 if (elementName === 'url_slug') {
                     return 'urlSlug';
-                }
-                if (elementName === 'article_categorization') {
-                    return 'articleCategorization';
                 }
                 if (elementName === 'author_bio') {
                     return 'authorBio';

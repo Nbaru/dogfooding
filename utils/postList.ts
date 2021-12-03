@@ -1,6 +1,7 @@
 import {deliveryClient} from "../deliveryClient";
 import {Post as PostKontentModel} from "../models/post";
 import {ItemTypes, Taxonomies} from "../constants";
+import {Elements} from "@kentico/kontent-delivery";
 
 export type LinkData = {
     readonly slug: string;
@@ -8,18 +9,17 @@ export type LinkData = {
     readonly itemCategorization: ReadonlyArray<string>;
 }
 
-const parsePostsList = (post: PostKontentModel): LinkData => {
-    const articleCategorizationTerms = post.articleCategorization?.value.map(value => value.name) ?? [];
-    const genreTerms = post.gendre?.value.map(value => value.name) ?? [];
-    return ({
+const getItemCategorization = (post: PostKontentModel): ReadonlyArray<string> =>
+    Object.values(Taxonomies).reduce((termsList, taxonomyName) =>
+        [...termsList, ...post[taxonomyName]
+            ?.value.map((value: Elements.TaxonomyElement) => value.name)], new Array());
+
+const parsePostsList = (post: PostKontentModel): LinkData =>
+    ({
         slug: post.untitledUrlSlug?.value ?? '',
         title: post.title?.value ?? '',
-        itemCategorization: [
-            ...articleCategorizationTerms,
-            ...genreTerms,
-        ],
+        itemCategorization: getItemCategorization(post),
     });
-};
 
 const shouldInvokeFilter = (terms: ReadonlyArray<string>): boolean => !(terms.length <= 0 || terms[0] === '');
 
@@ -28,9 +28,12 @@ type Filter = {
     readonly checkedTerms: Array<string>;
 }
 
+// limitations: post must has term from every taxonomy
+// exists better way with filtering?
 export const getAllPostsList = async (filters: Map<string, Filter>): Promise<ReadonlyArray<LinkData>> => {
     const articleCategorizationFilter = filters.get(Taxonomies.articleCategorization) as Filter;
     const genreFilter = filters.get(Taxonomies.genre) as Filter;
+    const difficultyFilter = filters.get(Taxonomies.difficulty) as Filter;
 
     const response = await deliveryClient
         .items<PostKontentModel>()
@@ -41,6 +44,9 @@ export const getAllPostsList = async (filters: Map<string, Filter>): Promise<Rea
         .anyFilter(
             `elements.${Taxonomies.articleCategorization}`,
             shouldInvokeFilter(articleCategorizationFilter.checkedTerms) ? articleCategorizationFilter.checkedTerms : articleCategorizationFilter.terms)
+        .anyFilter(
+            `elements.${Taxonomies.difficulty}`,
+            shouldInvokeFilter(difficultyFilter.checkedTerms) ? difficultyFilter.checkedTerms : difficultyFilter.terms)
         .toPromise();
 
     return response.items

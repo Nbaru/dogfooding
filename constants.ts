@@ -32,5 +32,6 @@ export type ItemsWithUrlSlug = MapItemTypeToItem[ItemTypesWithUrlSlug];
 
 export enum Taxonomies {
     articleCategorization = 'article_categorization',
-    genre = 'gendre'
+    genre = 'genre',
+    difficulty = 'difficulty',
 }
