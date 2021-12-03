@@ -25,20 +25,21 @@ export const Filter: React.FC<FilterData> = ({ terms, checkedTerms, name }) => {
 
     return (
         <FilterWrapper>
-            {terms.map(term =>
-                (
-                    <FilterItem key={term}>
-                        <input
-                            type="checkbox"
-                            id={term}
-                            onClick={async () => await refreshData(getQuery(name, getQueryData(), term))
-                            }
-                            defaultChecked={checkedTerms?.includes(term) ?? false}
-                        />
-                        <label htmlFor={term}>{term}</label>
-                    </FilterItem>
-                )
-            )}
+            {terms
+                .map(term =>
+                    (
+                        <FilterItem key={term}>
+                            <input
+                                type="checkbox"
+                                id={term}
+                                onClick={async () => await refreshData(getQuery(name, getQueryData(), term))
+                                }
+                                defaultChecked={checkedTerms?.includes(term) ?? false}
+                            />
+                            <label htmlFor={term}>{term.replace('_', ' ')}</label>
+                        </FilterItem>
+                    )
+                )}
         </FilterWrapper>
     )
 };

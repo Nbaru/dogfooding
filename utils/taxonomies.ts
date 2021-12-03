@@ -5,5 +5,5 @@ export const getTerms = async (name: string): Promise<Array<string>> => {
         .taxonomy(name)
         .toPromise();
 
-    return response?.taxonomy.terms.map(term => term.name);
+    return response?.taxonomy.terms.map(term => term.codename);
 };
