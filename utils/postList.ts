@@ -2,6 +2,7 @@ import {deliveryClient} from "../deliveryClient";
 import {Post as PostKontentModel} from "../models/post";
 import {ItemTypes, Taxonomies} from "../constants";
 import {Elements} from "@kentico/kontent-delivery";
+import {FilterData} from "../components/Filter";
 
 export type LinkData = {
     readonly slug: string;
@@ -21,34 +22,20 @@ const parsePostsList = (post: PostKontentModel): LinkData =>
         itemCategorization: getItemCategorization(post),
     });
 
-const shouldInvokeFilter = (terms: ReadonlyArray<string>): boolean => !(terms.length <= 0 || terms[0] === '');
+const shouldInvokeFilter = (terms: ReadonlyArray<string>): boolean => !(terms.length <= 0);
 
-type Filter = {
-    readonly terms: Array<string>;
-    readonly checkedTerms: Array<string>;
-}
-
-// limitations: post must has term from every taxonomy
-// exists better way with filtering?
-export const getAllPostsList = async (filters: Map<string, Filter>): Promise<ReadonlyArray<LinkData>> => {
-    const articleCategorizationFilter = filters.get(Taxonomies.articleCategorization) as Filter;
-    const genreFilter = filters.get(Taxonomies.genre) as Filter;
-    const difficultyFilter = filters.get(Taxonomies.difficulty) as Filter;
-
+export const getAllPostsList = async (filters: ReadonlyArray<FilterData>): Promise<ReadonlyArray<LinkData>> => {
     const response = await deliveryClient
         .items<PostKontentModel>()
-        .equalsFilter('system.type', ItemTypes.Post)
-        .anyFilter(
-            `elements.${Taxonomies.genre}`,
-            shouldInvokeFilter(genreFilter.checkedTerms) ? genreFilter.checkedTerms : genreFilter.terms)
-        .anyFilter(
-            `elements.${Taxonomies.articleCategorization}`,
-            shouldInvokeFilter(articleCategorizationFilter.checkedTerms) ? articleCategorizationFilter.checkedTerms : articleCategorizationFilter.terms)
-        .anyFilter(
-            `elements.${Taxonomies.difficulty}`,
-            shouldInvokeFilter(difficultyFilter.checkedTerms) ? difficultyFilter.checkedTerms : difficultyFilter.terms)
-        .toPromise();
+        .equalsFilter('system.type', ItemTypes.Post);
 
-    return response.items
+    filters.forEach((filter) => {
+        if (shouldInvokeFilter(filter.checkedTerms)) {
+            response.anyFilter(`elements.${filter.name}`, [...filter.checkedTerms]);
+        }
+    });
+
+    const resolvedResponse = await response.toPromise();
+    return resolvedResponse.items
         .map(parsePostsList);
 };

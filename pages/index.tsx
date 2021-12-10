@@ -65,14 +65,7 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async ( context ): Promise<{ readonly props: HomeProps }> => {
     const filters = await Promise.all(getFiltersData(context.query));
 
-    const posts = await getAllPostsList(
-        filters
-            .reduce((data, filter) => 
-                data.set(filter.name, {
-                    terms: filter.terms,
-                    checkedTerms: filter.checkedTerms
-                }), new Map)
-    );
+    const posts = await getAllPostsList(filters);
 
     return {
         props: {
